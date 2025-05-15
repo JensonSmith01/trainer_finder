@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "287981048572",
+    "project_id": "personal-trainer-finder-app",
+    "storage_bucket": "personal-trainer-finder-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287981048572:android:7fbfa5fbe2e7c7d4cdbd79",
+        "android_client_info": {
+          "package_name": "com.example.trainer_finder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsIe5yvPHxtQYtz8ZtDGFjyNmMWKMV-LU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
