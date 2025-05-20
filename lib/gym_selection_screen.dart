@@ -5,7 +5,7 @@ class GymSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gyms = ['Gold\'s Gym', 'Planet Fitness', 'Anytime Fitness'];
+    final gyms = ['Hart Gym', 'Bodifi Fitness', 'Anytime Fitness'];
 
     return Scaffold(
       appBar: AppBar(title: const Text('Select a Gym')),
