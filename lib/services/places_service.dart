@@ -2,15 +2,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<List<Map<String, dynamic>>> fetchNearbyGyms(double lat, double lng) async {
-  const apiKey = 'YOUR_API_KEY_HERE'; // Replace this
+  const apiKey = 'AIzaSyA7MmoiYPa2gM2MLTvDVvkln0UBY8UAV8s'; // Replace with your actual key
   const radius = 5000;
-  const type = 'gym'; // This is now used properly
+  const type = 'gym';
 
   final url = Uri.parse(
     'https://maps.googleapis.com/maps/api/place/nearbysearch/json'
     '?location=$lat,$lng'
     '&radius=$radius'
-    '&type=$type' // ✅ Fixed: now uses the variable
+    '&type=$type'
     '&key=$apiKey',
   );
 
@@ -31,3 +31,5 @@ Future<List<Map<String, dynamic>>> fetchNearbyGyms(double lat, double lng) async
     throw Exception('Failed to fetch gyms: ${response.statusCode}');
   }
 }
+
+
