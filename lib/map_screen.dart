@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'trainer_list_screen.dart';
-import 'services/places_service.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -23,91 +19,28 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     _loadMapStyle();
-    _loadAllGyms();
+    _loadManualGyms();
   }
 
   void _loadMapStyle() async {
     _mapStyle = await rootBundle.loadString('assets/map_style.json');
   }
 
-  Future<void> _loadAllGyms() async {
-    await _loadUserLocation();
-    await _loadFirestoreGyms();
-    await _loadNearbyGymsFromPlaces();
-  }
-
-  Future<void> _loadUserLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return;
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) return;
-    }
-
-    final position = await Geolocator.getCurrentPosition();
-    _mapCenter = LatLng(position.latitude, position.longitude);
-    _mapController?.animateCamera(CameraUpdate.newLatLng(_mapCenter));
-    print('User location set to: $_mapCenter');
-  }
-
-  Future<void> _loadFirestoreGyms() async {
-    final gymsSnapshot = await FirebaseFirestore.instance.collection('gyms').get();
-
-    final markers = gymsSnapshot.docs.map((doc) {
-      final data = doc.data();
-      final gymName = data['name'];
-      final lat = data['latitude'];
-      final lng = data['longitude'];
-      print('Firestore gym: $gymName at $lat, $lng');
-
-      return Marker(
-        markerId: MarkerId('firestore_${doc.id}'),
-        position: LatLng(lat, lng),
-        infoWindow: InfoWindow(
-          title: gymName,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => TrainerListScreen(
-                  gymDocId: doc.id,
-                  gymName: gymName,
-                ),
-              ),
-            );
-          },
-        ),
-      );
-    }).toSet();
-
+  void _loadManualGyms() {
     setState(() {
-      _markers.addAll(markers);
+      _markers.addAll([
+        const Marker(
+          markerId: MarkerId('test_gym_1'),
+          position: LatLng(43.8146, -111.7856),
+          infoWindow: InfoWindow(title: 'Test Gym Marker 1'),
+        ),
+        const Marker(
+          markerId: MarkerId('test_gym_2'),
+          position: LatLng(43.8200, -111.7800),
+          infoWindow: InfoWindow(title: 'Test Gym Marker 2'),
+        ),
+      ]);
     });
-  }
-
-  Future<void> _loadNearbyGymsFromPlaces() async {
-    try {
-      final gyms = await fetchNearbyGyms(_mapCenter.latitude, _mapCenter.longitude);
-      print('Fetched ${gyms.length} nearby gyms from Places API');
-      gyms.forEach((g) => print('${g['name']} - ${g['lat']}, ${g['lng']}'));
-
-      final markers = gyms.map((gym) {
-        return Marker(
-          markerId: MarkerId('places_${gym['name']}_${gym['lat']}'),
-          position: LatLng(gym['lat'], gym['lng']),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-          infoWindow: InfoWindow(title: gym['name']),
-        );
-      }).toSet();
-
-      setState(() {
-        _markers.addAll(markers);
-      });
-    } catch (e) {
-      print('Error loading gyms from Places API: $e');
-    }
   }
 
   @override
@@ -122,10 +55,9 @@ class _MapScreenState extends State<MapScreen> {
         markers: _markers,
         onMapCreated: (controller) {
           _mapController = controller;
-          // Temporarily disable styling to rule out issues
-          // if (_mapStyle != null) {
-          //   _mapController!.setMapStyle(_mapStyle);
-          // }
+          if (_mapStyle != null) {
+            _mapController!.setMapStyle(_mapStyle);
+          }
         },
         myLocationEnabled: true,
         myLocationButtonEnabled: true,

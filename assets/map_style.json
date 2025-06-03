@@ -8,13 +8,25 @@
     "stylers": [{ "visibility": "off" }]
   },
   {
-    "featureType": "road",
-    "elementType": "labels",
+    "featureType": "administrative",
     "stylers": [{ "visibility": "off" }]
   },
   {
-    "featureType": "administrative",
-    "stylers": [{ "visibility": "off" }]
+    "featureType": "road",
+    "elementType": "labels",
+    "stylers": [{ "visibility": "on" }]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [{ "visibility": "on" }]
+  },
+  {
+    "featureType": "landscape",
+    "stylers": [{ "visibility": "on" }]
+  },
+  {
+    "featureType": "water",
+    "stylers": [{ "visibility": "on" }]
   }
 ]
-
