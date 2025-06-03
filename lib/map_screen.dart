@@ -49,6 +49,7 @@ class _MapScreenState extends State<MapScreen> {
     final position = await Geolocator.getCurrentPosition();
     _mapCenter = LatLng(position.latitude, position.longitude);
     _mapController?.animateCamera(CameraUpdate.newLatLng(_mapCenter));
+    print('User location set to: $_mapCenter');
   }
 
   Future<void> _loadFirestoreGyms() async {
@@ -59,6 +60,7 @@ class _MapScreenState extends State<MapScreen> {
       final gymName = data['name'];
       final lat = data['latitude'];
       final lng = data['longitude'];
+      print('Firestore gym: $gymName at $lat, $lng');
 
       return Marker(
         markerId: MarkerId('firestore_${doc.id}'),
@@ -78,7 +80,7 @@ class _MapScreenState extends State<MapScreen> {
           },
         ),
       );
-    });
+    }).toSet();
 
     setState(() {
       _markers.addAll(markers);
@@ -89,26 +91,19 @@ class _MapScreenState extends State<MapScreen> {
     try {
       final gyms = await fetchNearbyGyms(_mapCenter.latitude, _mapCenter.longitude);
       print('Fetched ${gyms.length} nearby gyms from Places API');
+      gyms.forEach((g) => print('${g['name']} - ${g['lat']}, ${g['lng']}'));
 
       final markers = gyms.map((gym) {
-        print('Adding gym marker: ${gym['name']} at ${gym['lat']}, ${gym['lng']}');
         return Marker(
           markerId: MarkerId('places_${gym['name']}_${gym['lat']}'),
           position: LatLng(gym['lat'], gym['lng']),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
           infoWindow: InfoWindow(title: gym['name']),
         );
-      });
+      }).toSet();
 
       setState(() {
         _markers.addAll(markers);
-        _markers.add(
-          const Marker(
-            markerId: MarkerId('test_gym'),
-            position: LatLng(43.8146, -111.7856),
-            infoWindow: InfoWindow(title: 'Test Gym Marker'),
-          ),
-        );
       });
     } catch (e) {
       print('Error loading gyms from Places API: $e');
@@ -127,9 +122,10 @@ class _MapScreenState extends State<MapScreen> {
         markers: _markers,
         onMapCreated: (controller) {
           _mapController = controller;
-          if (_mapStyle != null) {
-            _mapController!.setMapStyle(_mapStyle);
-          }
+          // Temporarily disable styling to rule out issues
+          // if (_mapStyle != null) {
+          //   _mapController!.setMapStyle(_mapStyle);
+          // }
         },
         myLocationEnabled: true,
         myLocationButtonEnabled: true,

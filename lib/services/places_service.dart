@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<List<Map<String, dynamic>>> fetchNearbyGyms(double lat, double lng) async {
-  const apiKey = 'AIzaSyA7MmoiYPa2gM2MLTvDVvkln0UBY8UAV8s'; // Replace with your actual key
-  const radius = 5000;
+  const apiKey = 'AIzaSyA7MmoiYPa2gM2MLTvDVvkln0UBY8UAV8s'; 
+  const radius = 50000;
   const type = 'gym';
 
   final url = Uri.parse(
