@@ -1,6 +1,14 @@
 [
   {
-    "featureType": "poi",
+    "featureType": "poi.business",
+    "stylers": [{ "visibility": "off" }]
+  },
+  {
+    "featureType": "poi.medical",
+    "stylers": [{ "visibility": "off" }]
+  },
+  {
+    "featureType": "poi.school",
     "stylers": [{ "visibility": "off" }]
   },
   {
@@ -8,25 +16,18 @@
     "stylers": [{ "visibility": "off" }]
   },
   {
-    "featureType": "administrative",
-    "stylers": [{ "visibility": "off" }]
+    "featureType": "administrative.province",
+    "elementType": "geometry.stroke",
+    "stylers": [{ "visibility": "on" }]
+  },
+  {
+    "featureType": "administrative.locality",
+    "elementType": "labels.text.fill",
+    "stylers": [{ "visibility": "on" }]
   },
   {
     "featureType": "road",
     "elementType": "labels",
-    "stylers": [{ "visibility": "on" }]
-  },
-  {
-    "featureType": "road",
-    "elementType": "geometry",
-    "stylers": [{ "visibility": "on" }]
-  },
-  {
-    "featureType": "landscape",
-    "stylers": [{ "visibility": "on" }]
-  },
-  {
-    "featureType": "water",
     "stylers": [{ "visibility": "on" }]
   }
 ]
